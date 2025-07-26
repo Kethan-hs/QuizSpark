@@ -1,0 +1,111 @@
+# Build i-Quiz: Real-Time Quiz App
+
+## Core Requirements
+
+Create i-Quiz, a web-based real-time quiz application that supports 200+ concurrent users with the following architecture:
+
+### Frontend (React/Next.js + TypeScript)
+- **Host Dashboard**: Create/edit quizzes, start sessions, view live leaderboard
+- **Player Interface**: Join with PIN, answer questions, see results
+- **Responsive Design**: Works on mobile, tablet, and desktop
+- **Real-time Updates**: Live question display, answer submission, leaderboard updates
+- **Visual Design**: Colorful UI with animated transitions, progress bars, countdown timers
+
+### Backend (Node.js/Express + Socket.io)
+- **RESTful API**: Quiz CRUD operations, session handling
+- **WebSocket Integration**: Real-time communication for live quiz sessions
+- **Database**: PostgreSQL/MongoDB for quiz storage, session data, user responses
+- **Session Management**: Game PIN generation, room management, player tracking
+- **Scoring System**: Points based on correctness and response time
+
+## Technical Specifications
+
+### Real-time Features (Socket.io)
+- Room-based architecture (each quiz session = separate room)
+- Event handling: `join-room`, `submit-answer`, `next-question`, `end-quiz`
+- Broadcast updates: Current question, player answers, live leaderboard
+- Connection management: Handle disconnections, reconnections
+
+### Performance & Scalability
+- **Horizontal Scaling**: Use Redis for session storage and Socket.io adapter
+- **Database Optimization**: Indexed queries, connection pooling
+- **Caching**: Redis for frequent data (leaderboards, active sessions)
+- **Rate Limiting**: Prevent spam, ensure fair play
+- **Load Testing**: Handle 200+ concurrent connections
+
+### Database Schema
+```sql
+Tables: quizzes, questions, quiz_sessions, player_responses, leaderboards
+Relationships: One quiz -> Many questions, One session -> Many players
+```
+
+### Security & Validation
+- Input sanitization for quiz content
+- Rate limiting on answer submissions
+- Session validation and anti-cheating measures
+- CORS configuration for cross-origin requests
+
+## Key Features to Implement
+
+### Quiz Management
+- Create quizzes with multiple-choice questions (2-4 options)
+- Add images/media to questions
+- Set time limits per question (5-120 seconds)
+- Preview mode before going live
+
+### Game Flow
+1. Host starts quiz session → generates unique PIN
+2. Players join using PIN → enter room
+3. Real-time question display with countdown timer
+4. Collect answers → show correct answer and updated leaderboard
+5. Repeat for all questions → final results screen
+
+### Scoring Algorithm
+```javascript
+Points = (correctAnswer ? basePoints : 0) * speedMultiplier
+speedMultiplier = (timeRemaining / totalTime) * 0.5 + 0.5
+```
+
+### Performance Targets
+- Support 200+ simultaneous players per quiz session
+- Sub-500ms response time for answer submissions
+- 99.9% uptime during active sessions
+- Graceful handling of network disconnections
+
+## Technology Stack Recommendations
+
+**Frontend:**
+- React 18+ with TypeScript
+- Socket.io-client for real-time communication
+- Tailwind CSS for responsive design
+- React Query for API state management
+
+**Backend:**
+- Node.js with Express.js
+- Socket.io for WebSocket connections
+- PostgreSQL with Prisma ORM
+- Redis for caching and session storage
+
+**Infrastructure:**
+- Docker containers for easy deployment
+- NGINX as reverse proxy
+- PM2 for process management
+- Environment-based configuration
+
+## Deliverables Expected
+
+1. **Complete codebase** with clear folder structure
+2. **API documentation** with all endpoints
+3. **Database migration scripts** and seed data
+4. **Docker configuration** for easy setup
+5. **Performance testing results** showing 200+ user capacity
+6. **Deployment guide** with environment setup
+
+## Optional Advanced Features
+- Question types: True/False, Type Answer, Image-based questions
+- Team mode support
+- Analytics dashboard for quiz performance
+- Export results to CSV/PDF
+- Integration with external APIs for question banks
+
+Build i-Quiz as a production-ready application with proper error handling capabilities.
